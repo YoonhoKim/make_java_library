@@ -1,0 +1,127 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.seokjinkim</groupId>
+    <artifactId>makelibrary</artifactId>
+    <version>0.0.2</version>
+    <name>make-library</name>
+    <description>For Library</description>
+    
+    <repositories> 
+        <repository> 
+            <id>central</id> 
+            <url>https://repo1.maven.org/maven2/</url> 
+         </repository> 
+    </repositories>
+    
+    <build>
+        <!-- JAVA 소스 위치 설정, 여러군데 위치할 시 Plugin에서 세팅 -->
+        <sourceDirectory>src/main/java</sourceDirectory>
+        
+        <!-- 리소스 자원 위치 세팅  -->
+        <resources>
+          <resource>
+            <directory>src/main/resources</directory>
+          </resource>
+        </resources>
+        
+        <finalName>${project.name}</finalName>
+         
+        <plugins>
+             <!-- JDK 및  UTF-8 인코딩 지정 방법 -->
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <configuration>
+                    <source>11</source>
+                    <target>11</target>
+                    <encoding>UTF-8</encoding>
+                </configuration>
+            </plugin>
+            
+            <!-- JAVA 소스 여려개 일 시 설정 -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>3.0.0</version>
+                <executions>
+                    <execution>
+                        <id>add-source-dir</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>add-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>src/main/java</source>
+                                <!-- <source>others/src</source> -->
+                            </sources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- 의존성 jar 하나로 패키징 시 -->
+             <plugin>
+                 <artifactId>maven-assembly-plugin</artifactId>
+                 <version>3.2.0</version>
+                 <configuration>
+                     <archive>
+                         <manifest>
+                         </manifest>
+                     </archive>
+                     <descriptorRefs>
+                         <descriptorRef>jar-with-dependencies</descriptorRef>
+                     </descriptorRefs>
+                     <!-- jar-with-dependencies 붙이기 싫다면 세팅 -->
+                     <appendAssemblyId>false</appendAssemblyId>
+                     <finalName>${project.name}-single-App</finalName>
+                      <descriptors>
+                        <descriptor>src/main/resource/assemblyFilterassembly.xml</descriptor>
+                      </descriptors>
+                 </configuration>
+                 <executions>
+                  <execution>
+                    <id>make-assembly</id>
+                    <phase>package</phase>
+                    <goals>
+                      <goal>single</goal>
+                    </goals>
+                  </execution>
+                </executions>
+             </plugin>
+        </plugins>
+    </build>
+    
+    <dependencies>
+    
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.9</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/junit/junit -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.13</version>
+            <scope>test</scope>
+        </dependency>
+         <!-- HttpClient 통신 -->
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.5.11</version>
+        </dependency>
+         <!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.8.6</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-collections4 -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-collections4</artifactId>
+            <version>4.4</version>
+        </dependency>
+    </dependencies>
+</project>
