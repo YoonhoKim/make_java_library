@@ -5,7 +5,6 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Type;
-import java.net.URI;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -62,38 +61,24 @@ public class HttpClientCustom {
         return HTTP_CLIENT;
     }
     
-    public static String getHttpGetStringApiDataWithParam( String url, Map<String, String> params ) {
-        String result = "";
-        try{
-            url = getParamToString(url, params);
-            HttpEntity httpEntity = getEntity(url);
-            if( httpEntity != null ) {
-                result = EntityUtils.toString(httpEntity);
-            }
-        }catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-        
-        return result;
-    }
-    
     /**
      * Http통신 후 결과 String객체로 얻기
      * @param url
      * @return String
+     * @throws Exception 
      */
-    public static String getHttpGetStringApiData( String url ) {
-        return getHttpGetStringApiDataWithParam(url, Collections.EMPTY_MAP);
+    public static String getHttpGetStringApiData( String url ) throws Exception {
+        return getStringApiDataWithParamDoGet( url, Collections.EMPTY_MAP );
     }
     
     /**
-     * Http통신 후 결과 String객체로 얻기 - 파라메타가 있을 시 
+     * API서버에서 Json데이터 String으로 얻기 GET방식 통신 ( URL, 파레메터 세팅 )
      * @param url
      * @param params
      * @return String
      * @throws Exception 
      */
-    public static String getHttpGetStringApiData( String url, Map<String, String> params ) throws Exception {
+    public static String getStringApiDataWithParamDoGet( String url, Map<String, String> params ) throws Exception {
         String result = "";
         if( StringUtils.isNotBlank( url ) ) {
             String changedUrl = getParamToString(url, params);
@@ -111,7 +96,6 @@ public class HttpClientCustom {
      * @return HttpEntity
      */
     private static HttpEntity getEntity( String url ) throws Exception {
-        
         HttpGet httpGet = new HttpGet(url);
         HttpEntity result = null;
         HttpResponse httpResponse = HTTP_CLIENT.execute(httpGet);
@@ -130,10 +114,10 @@ public class HttpClientCustom {
      * @param params
      * @return String
      */
-    private static String getParamToString( String url, Map<String, String> params ) {
+    public static String getParamToString( String url, Map<String, String> params ) {
         String resultUrl = "";
         try {
-            URIBuilder uri = new URIBuilder(new URI(url));
+            URIBuilder uri = new URIBuilder(url);
             for (String key : params.keySet()) {
                 uri.addParameter(key, params.get(key));
             }
@@ -173,6 +157,16 @@ public class HttpClientCustom {
     }
     
     
+    /**
+     * url을 가지고 원하 model객체 List형 객체로 결과 받아오기
+     * @param url
+     * @param model
+     * @return List<T>
+     * @throws Exception 
+     */
+    public static <T> List<T> getHttpGetListObjectApiData( String url, Class<T> model ) throws Exception {
+        return getHttpGetListObjectApiData(url, Collections.EMPTY_MAP, model);
+    }
     
     /**
      * url과 param을 가지고 원하 model객체 List형 객체로 결과 받아오기
@@ -184,7 +178,7 @@ public class HttpClientCustom {
      */
     public static <T> List<T> getHttpGetListObjectApiData( String url,  Map<String, String> params, Class<T> model ) throws Exception {
         List<T> result = Collections.EMPTY_LIST;
-        String apiData = getHttpGetStringApiData(url, params);
+        String apiData = getStringApiDataWithParamDoGet(url, params);
         if( StringUtils.isNoneBlank(apiData) ){
             JsonElement jsonElement = JsonParser.parseString(apiData);
             JsonObject jobject = jsonElement.getAsJsonObject();
