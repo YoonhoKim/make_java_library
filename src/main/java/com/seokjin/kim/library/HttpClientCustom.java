@@ -142,6 +142,9 @@ public class HttpClientCustom {
             String changedUrl = getParamToString(url, params);
             HttpEntity httpEntity = getEntity(changedUrl);
             if( httpEntity != null ) {
+                if( destination.indexOf(".") < 0 ) {
+                    destination += "\\Data.zip";
+                }
                 File copyFile = new File(destination);
                 try(
                     InputStream  inputStream = httpEntity.getContent();
