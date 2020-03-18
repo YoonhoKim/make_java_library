@@ -18,11 +18,12 @@ public class StringToEveryThing {
         String defaultType = StringUtils.isEmpty(type) ? "yyyy-mm-dd" : type;
         String changeDate  = date.replaceAll("-","").replaceAll(" ","").replaceAll("\\.","");
         SimpleDateFormat format = new SimpleDateFormat(defaultType);
-        if( changeDate.length() != 7 ) {
-            new Throwable("형식을 확인하세요");
-        }
-        changeDate = new StringBuilder(changeDate.substring(0,4)).append("-").append(changeDate.substring(4,6)).append("-").append(changeDate.substring(6,8)).toString();
         Date result = new Date();
+        if( changeDate.length() == 8 ) {
+            changeDate = new StringBuilder(changeDate.substring(0,4)).append("-").append(changeDate.substring(4,6)).append("-").append(changeDate.substring(6,8)).append(" 12:00:00").toString();
+        }
+        
+       
         try {
             result = format.parse(changeDate);
         } catch (Exception e) {
@@ -39,6 +40,8 @@ public class StringToEveryThing {
      * @return Double
      */
     public static Double getStringToDouble( String number ) {
+        if ( StringUtils.isBlank(number) ) return 0.0;
+        
         Double todayPrice = new BigDecimal(number.replaceAll(",", "").replaceAll(" ", "").replace("%","")).doubleValue();
         return todayPrice;
         
