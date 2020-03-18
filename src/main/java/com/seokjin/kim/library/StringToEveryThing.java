@@ -15,7 +15,7 @@ public class StringToEveryThing {
      */
     public static Date getStringToDate( String date, String type ) {
         
-        String defaultType = StringUtils.isEmpty(type) ? "yyyy-mm-dd" : type;
+        String defaultType = StringUtils.isEmpty(type) ? "yyyy-MM-dd HH:mm:ss" : type;
         String changeDate  = date.replaceAll("-","").replaceAll(" ","").replaceAll("\\.","");
         SimpleDateFormat format = new SimpleDateFormat(defaultType);
         Date result = new Date();
@@ -31,6 +31,27 @@ public class StringToEveryThing {
         }
         
         return result;
+        
+    }
+    public static Date getStringToDate( String date ) {
+        return getStringToDate(date, "yyyy-MM-dd HH:mm:ss" );
+    }
+    
+    /**
+     * 시간 없이 2013-04-08 , 20130408, 2013.04.08, 2013 04 08 케이스 2013-04-08로 통일 
+     * @param date
+     * @param type
+     * @return Date
+     */
+    public static String getStringToDateDash( String date ) {
+        if(  StringUtils.isEmpty(date) ) return "";
+        
+        String changeDate  = date.replaceAll("-","").replaceAll(" ","").replaceAll("\\.","");
+        if( changeDate.length() == 8 ) {
+            changeDate = new StringBuilder(changeDate.substring(0,4)).append("-").append(changeDate.substring(4,6)).append("-").append(changeDate.substring(6,8)).toString();
+        }
+        
+        return changeDate;
         
     }
     
