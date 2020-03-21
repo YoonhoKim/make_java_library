@@ -71,6 +71,7 @@ public class StringToEveryThing {
     /**
      * AddcDef같은 텍스트 addc_def처럼 원하는 구분자로 변경하는  로직
      * @param inputText
+     * @param separator
      * @return String
      */
     public static String getUpperCaseStringToLowercaseWithWant( String inputText , String separator ) {
@@ -88,6 +89,20 @@ public class StringToEveryThing {
         }
         
         return result.toString();
+        
+    }
+    
+    /**
+     * 원하는 구분자로 나눈 맨 마지막 정보 리턴 ex) ab-dc-df >> df 리턴
+     * @param inputText
+     * @param separator
+     * @return String
+     */
+    public static String getLastStringWithSeperator( String inputText , String separator ) {
+        String result = inputText;
+        result = inputText.substring(result.lastIndexOf(separator)+1, inputText.length());
+        
+        return result;
         
     }
 }
