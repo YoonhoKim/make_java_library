@@ -67,4 +67,27 @@ public class StringToEveryThing {
         return todayPrice;
         
     }
+    
+    /**
+     * AddcDef같은 텍스트 addc_def처럼 원하는 구분자로 변경하는  로직
+     * @param inputText
+     * @return String
+     */
+    public static String getUpperCaseStringToLowercaseWithWant( String inputText , String separator ) {
+        if( StringUtils.isBlank(inputText) ) return inputText;
+        
+        StringBuilder result = new StringBuilder();
+        for (int index = 0; index < inputText.length(); index++) {
+            char thisChar = inputText.charAt(index);
+            // 대문자 범위
+            if ( thisChar >= 65 && thisChar <= 90 && index != 0 ) {
+                result.append(separator).append(String.valueOf(thisChar).toLowerCase());
+            } else {
+                result.append(String.valueOf(thisChar).toLowerCase());
+            }
+        }
+        
+        return result.toString();
+        
+    }
 }
